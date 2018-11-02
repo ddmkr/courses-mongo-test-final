@@ -28,7 +28,27 @@ This is an example exercise.
 
 `@sample_code`
 ```{r}
+library(mongolite)
 
+# Connect to demo server
+con <- mongo("mtcars")
+
+# Wipe collection
+if(con$count() > 0) 
+  con$drop()
+  
+# Insert some data
+con$insert(mtcars)
+stopifnot(con$count() == nrow(mtcars))
+
+# Query data
+mydata <- con$find()
+stopifnot(all.equal(mydata, mtcars))
+con$drop()
+
+# Automatically disconnect when connection is removed
+rm(con)
+gc()
 ```
 
 `@solution`
